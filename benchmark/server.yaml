@@ -1,0 +1,70 @@
+scripts:
+  clone:
+    # clone the repository and checkout the proper commit/branch
+    - sh: if [ -d ${{APP_FOLDER}} ]; then rm -rf ${{APP_FOLDER}}; fi
+    - sh: git clone --depth 1 ${{APP_URL}} ${{APP_FOLDER}}
+    - sh: cd ${{APP_FOLDER}} && git fetch --depth 1 origin ${{APP_COMMIT:main}} && git checkout ${{APP_COMMIT:main}}
+
+  build-sut:
+    - script: select-java
+      with:
+        JAVA_VERSION: ${{APP_JAVA_VERSION}}
+    - script: clone
+    - sh: > 
+        cd ${{APP_FOLDER}} && 
+        ./mvnw clean package 
+        -Dquarkus.container-image.build=true
+        -Dquarkus.container-image.group=${{APP_TAG_GROUP}}
+        -Dquarkus.container-image.name=${{APP_TAG_NAME}}
+        -Dquarkus.container-image.tag=${{APP_TAG_VERSION}}
+
+  start-sut:
+    - log: starting up image ${{APP_IMAGE}}
+    - sh: >
+        ${{CONTAINER_RUNTIME}} run -d
+        --replace --name ${{APP_TAG_NAME}}
+        -p ${{APP_PORT}}:8080
+        ${{APP_IMAGE}}
+      then:
+        - regex: (?<HOST.APP_POD_ID>[a-f0-9]{64}$)
+          else:
+            - abort: failed to capture pod id for Heroes rest service
+        - script: extract-pid-from-container
+          with:
+            CONTAINER_POD_ID: ${{HOST.APP_POD_ID}}
+            STATE_PID: HOST.APP_JAVA_PID
+    - sh: ${{CONTAINER_RUNTIME}} logs -f ${{HOST.APP_POD_ID}}
+      silent: true # prevent logs to be printed in the terminal
+      watch:
+        - regex: started in.*Listening on
+          then:
+            - ctrlC
+      timer:
+        1m: # max wait time
+          - abort: Server application ${{APP_TAG_NAME}} has not been ready in 1 min
+    - signal: APP_READY
+
+  cleanup-sut:
+    - queue-download: ${{APP_LOGS_FILE}}
+    - sh: ${{CONTAINER_RUNTIME}} logs ${{HOST.APP_POD_ID}} > ${{APP_LOGS_FILE}}
+    - sh: ${{CONTAINER_RUNTIME}} rm -f ${{HOST.APP_POD_ID}}
+    - log: do nothing
+
+states:
+  CONTAINER_RUNTIME: podman
+
+  APP_URL: https://github.com/lampajr/webhook-umb-example.git
+  APP_FOLDER: /tmp/quarkus_app
+  APP_COMMIT: main
+
+  APP_JAVA_VERSION: temurin-21.0.5+11.0.LTS
+
+  # localhost/test/getting-started:0.0.1-SNAPSHOT
+  APP_TAG_GROUP: test
+  APP_TAG_NAME: getting-started
+  APP_TAG_VERSION: 0.0.1-SNAPSHOT
+
+  APP_IMAGE: "localhost/${{APP_TAG_GROUP}}/${{APP_TAG_NAME}}:${{APP_TAG_VERSION}}"
+  APP_LOGS_FILE: /tmp/${{APP_TAG_NAME}}.log
+
+  APP_PORT: 8080

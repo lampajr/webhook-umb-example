@@ -1,0 +1,30 @@
+hosts:
+  sut: ${{SUT_SERVER}}
+  driver: ${{LOAD_DRIVER_SERVER}}
+
+roles:
+  sut:
+    hosts:
+      - sut
+    setup-scripts:
+      - build-sut
+    run-scripts:
+      - start-sut
+    cleanup-scripts:
+      - cleanup-sut
+
+  driver:
+    hosts:
+      - driver
+    setup-scripts:
+      - build-driver
+    run-scripts:
+      - start-driver
+    cleanup-scripts:
+      - cleanup-driver
+
+
+states:
+  # <user>@<server> or LOCAL for local env
+  SUT_SERVER: LOCAL
+  LOAD_DRIVER_SERVER: LOCAL
