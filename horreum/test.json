@@ -1,0 +1,311 @@
+{
+  "access": "PUBLIC",
+  "owner": "dev-team",
+  "name": "getting-started",
+  "description": "",
+  "datastoreId": null,
+  "timelineLabels": [],
+  "fingerprintLabels": [],
+  "transformers": [],
+  "notificationsEnabled": true,
+  "variables": [
+    {
+      "id": 1,
+      "testId": 10,
+      "name": "max_response_time",
+      "order": 0,
+      "labels": [
+        "gs.max_response_time"
+      ],
+      "changeDetection": [
+        {
+          "id": 1,
+          "model": "relativeDifference",
+          "config": {
+            "model": "relativeDifference",
+            "filter": "mean",
+            "window": 1,
+            "threshold": 0.2,
+            "minPrevious": 1
+          }
+        },
+        {
+          "id": 2,
+          "model": "relativeDifference",
+          "config": {
+            "model": "relativeDifference",
+            "filter": "mean",
+            "window": 5,
+            "threshold": 0.1,
+            "minPrevious": 5
+          }
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "testId": 10,
+      "name": "99_99_response_time",
+      "order": 1,
+      "labels": [
+        "gs.percentile_99_99"
+      ],
+      "changeDetection": [
+        {
+          "id": 4,
+          "model": "relativeDifference",
+          "config": {
+            "model": "relativeDifference",
+            "filter": "mean",
+            "window": 1,
+            "threshold": 0.2,
+            "minPrevious": 5
+          }
+        },
+        {
+          "id": 3,
+          "model": "relativeDifference",
+          "config": {
+            "model": "relativeDifference",
+            "filter": "mean",
+            "window": 5,
+            "threshold": 0.1,
+            "minPrevious": 5
+          }
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "testId": 10,
+      "name": "99_9_response_time",
+      "order": 2,
+      "labels": [
+        "gs.percentile_99_9"
+      ],
+      "changeDetection": [
+        {
+          "id": 6,
+          "model": "relativeDifference",
+          "config": {
+            "model": "relativeDifference",
+            "filter": "mean",
+            "window": 1,
+            "threshold": 0.2,
+            "minPrevious": 5
+          }
+        },
+        {
+          "id": 5,
+          "model": "relativeDifference",
+          "config": {
+            "model": "relativeDifference",
+            "filter": "mean",
+            "window": 5,
+            "threshold": 0.1,
+            "minPrevious": 5
+          }
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "testId": 10,
+      "name": "99_response_time",
+      "order": 4,
+      "labels": [
+        "gs.percentile_99"
+      ],
+      "changeDetection": [
+        {
+          "id": 8,
+          "model": "relativeDifference",
+          "config": {
+            "model": "relativeDifference",
+            "filter": "mean",
+            "window": 5,
+            "threshold": 0.1,
+            "minPrevious": 5
+          }
+        },
+        {
+          "id": 7,
+          "model": "relativeDifference",
+          "config": {
+            "model": "relativeDifference",
+            "filter": "mean",
+            "window": 1,
+            "threshold": 0.2,
+            "minPrevious": 5
+          }
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "testId": 10,
+      "name": "mean_response_time",
+      "order": 5,
+      "labels": [
+        "gs.mean_response_time"
+      ],
+      "changeDetection": [
+        {
+          "id": 10,
+          "model": "relativeDifference",
+          "config": {
+            "model": "relativeDifference",
+            "filter": "mean",
+            "window": 1,
+            "threshold": 0.2,
+            "minPrevious": 5
+          }
+        },
+        {
+          "id": 9,
+          "model": "relativeDifference",
+          "config": {
+            "model": "relativeDifference",
+            "filter": "mean",
+            "window": 5,
+            "threshold": 0.1,
+            "minPrevious": 5
+          }
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "testId": 10,
+      "name": "std_dev_response_time",
+      "order": 5,
+      "labels": [
+        "gs.std_dev_response_time"
+      ],
+      "changeDetection": [
+        {
+          "id": 12,
+          "model": "relativeDifference",
+          "config": {
+            "model": "relativeDifference",
+            "filter": "mean",
+            "window": 1,
+            "threshold": 0.2,
+            "minPrevious": 1
+          }
+        },
+        {
+          "id": 11,
+          "model": "relativeDifference",
+          "config": {
+            "model": "relativeDifference",
+            "filter": "mean",
+            "window": 5,
+            "threshold": 0.1,
+            "minPrevious": 5
+          }
+        }
+      ]
+    }
+  ],
+  "missingDataRules": [],
+  "experiments": [
+    {
+      "id": 1,
+      "name": "Pull Request Experiment",
+      "testId": 10,
+      "selectorLabels": [
+        "gs.app_commit"
+      ],
+      "selectorFilter": "value => value != \"main\"",
+      "baselineLabels": [
+        "gs.app_commit"
+      ],
+      "baselineFilter": "value => value == \"main\"",
+      "comparisons": [
+        {
+          "model": "relativeDifference",
+          "config": {
+            "threshold": 0.1,
+            "greaterBetter": false,
+            "maxBaselineDatasets": 1
+          },
+          "variableId": 1,
+          "variableName": "max_response_time"
+        },
+        {
+          "model": "relativeDifference",
+          "config": {
+            "threshold": 0.1,
+            "greaterBetter": false,
+            "maxBaselineDatasets": 1
+          },
+          "variableId": 2,
+          "variableName": "99_99_response_time"
+        },
+        {
+          "model": "relativeDifference",
+          "config": {
+            "threshold": 0.1,
+            "greaterBetter": false,
+            "maxBaselineDatasets": 1
+          },
+          "variableId": 3,
+          "variableName": "99_9_response_time"
+        },
+        {
+          "model": "relativeDifference",
+          "config": {
+            "threshold": 0.1,
+            "greaterBetter": false,
+            "maxBaselineDatasets": 1
+          },
+          "variableId": 4,
+          "variableName": "99_response_time"
+        },
+        {
+          "model": "relativeDifference",
+          "config": {
+            "threshold": 0.1,
+            "greaterBetter": false,
+            "maxBaselineDatasets": 1
+          },
+          "variableId": 5,
+          "variableName": "mean_response_time"
+        },
+        {
+          "model": "relativeDifference",
+          "config": {
+            "threshold": 0.1,
+            "greaterBetter": false,
+            "maxBaselineDatasets": 1
+          },
+          "variableId": 6,
+          "variableName": "std_dev_response_time"
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "id": 1,
+      "event": "run/new",
+      "type": "http",
+      "config": {
+        "type": "http",
+        "url": "http://localhost:8081/horreum"
+      },
+      "secrets": {},
+      "testId": 10,
+      "active": true,
+      "runAlways": false
+    }
+  ],
+  "subscriptions": {
+    "id": 1,
+    "users": [],
+    "optout": [],
+    "teams": [],
+    "testId": 10
+  }
+}

@@ -67,4 +67,4 @@ states:
   APP_IMAGE: "localhost/${{APP_TAG_GROUP}}/${{APP_TAG_NAME}}:${{APP_TAG_VERSION}}"
   APP_LOGS_FILE: /tmp/${{APP_TAG_NAME}}.log
 
-  APP_PORT: 8080
+  APP_PORT: 8081
