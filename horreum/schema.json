@@ -230,6 +230,38 @@
       "filtering": false,
       "metrics": true,
       "schemaId": 1
+    },
+    {
+      "access": "PUBLIC",
+      "owner": "dev-team",
+      "id": 15,
+      "name": "pb.repo_full_name",
+      "extractors": [
+        {
+          "name": "pb_repo_full_name",
+          "jsonpath": "$.state.REPO_FULL_NAME",
+          "isarray": false
+        }
+      ],
+      "filtering": true,
+      "metrics": false,
+      "schemaId": 1
+    },
+    {
+      "access": "PUBLIC",
+      "owner": "dev-team",
+      "id": 16,
+      "name": "pb.pull_request_number",
+      "extractors": [
+        {
+          "name": "pb_pull_request_number",
+          "jsonpath": "$.state.PULL_REQUEST_NUMBER",
+          "isarray": false
+        }
+      ],
+      "filtering": true,
+      "metrics": false,
+      "schemaId": 1
     }
   ],
   "transformers": []

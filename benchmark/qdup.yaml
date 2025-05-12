@@ -28,3 +28,6 @@ states:
   # <user>@<server> or LOCAL for local env
   SUT_SERVER: LOCAL
   LOAD_DRIVER_SERVER: LOCAL
+
+  REPO_FULL_NAME: lampajr/webhook-umb-example
+  PULL_REQUEST_NUMBER:
