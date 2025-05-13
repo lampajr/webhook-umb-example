@@ -1,3 +1,11 @@
+
+globals:
+  javascript: |
+    // retrieves the hostname from the specified server
+    function getHostname(server){
+      return server == 'LOCAL' ? 'localhost' : server.split('@').pop()
+    }
+
 scripts:
   install-mise: #https://mise.jdx.dev/getting-started.html
     - sh:

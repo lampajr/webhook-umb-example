@@ -39,7 +39,7 @@ scripts:
     # wait for the SUT application to be ready
     - wait-for: APP_READY
     - log: running Hyperfoil benchmark..
-    - sh: jbang run@hyperfoil -o ${{HF_REPORT_FILE}} ${{HF_BENCHMARK_REF}} ${{HF_BENCHMARK_PARAMS:}} -PSERVICE_PORT=${{APP_PORT}}
+    - sh: jbang run@hyperfoil -o ${{HF_REPORT_FILE}} ${{HF_BENCHMARK_REF}} ${{HF_BENCHMARK_PARAMS:}} -PSERVICE_PORT=${{APP_PORT}} -PSERVICE_HOST=${{= getHostname( '${{SUT_SERVER}}' )}}
       watch:
         - regex:
             pattern: Started run (?<RUN.HF_RUN_ID>.*{4})
