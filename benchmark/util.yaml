@@ -7,24 +7,38 @@ globals:
     }
 
 scripts:
-  install-mise: #https://mise.jdx.dev/getting-started.html
-    - sh:
-        command: mise help
-        silent: true
-        ignore-exit-code: true
-    - regex: ".*command not found"
+  install-sdkman: #https://sdkman.io/install
+  - sh:
+      command: sdk help
+      prompt:
+        "Would you like to upgrade now? (Y/n): ": "Y"
+  - regex: ".*command not found"
+    then:
+    - sh: curl -s "https://get.sdkman.io" | bash
       then:
-        - sh: curl https://mise.run | sh
-          then:
-            - regex: "installed successfully"
-              else:
-                - abort: failed to install Mise
+      - regex: "Enjoy"
+        else:
+        - abort: failed to install SDKMAN
+    - sh: source "$HOME/.sdkman/bin/sdkman-init.sh"
+  - sh:
+      command: sdk version
+      prompt:
+        "Would you like to upgrade now? (Y/n): ": "Y"
+      # SDKMAN 5.9.1+575
+    then:
+    - regex: "SDKMAN (?<RUN.sdk_version>[\\d\\.\\+]+)"
 
   select-java:
-    - script: install-mise
-    - sh: mise use -g java@${{JAVA_VERSION:temurin-21.0.5+11.0.LTS}}
+    - script: install-sdkman
+    - sh: sdk install java ${{JAVA_VERSION:21.0.7-tem}}
     # mainly for debugging purposes
     - sh: java -version
+  
+  select-jbang:
+    - script: install-sdkman
+    - sh: sdk install jbang ${{JBANG_VERSION:0.126.0}}
+    # mainly for debugging purposes
+    - sh: jbang --version
 
   extract-pid-from-container:
     # CONTAINER_POD_ID: the id of the running container

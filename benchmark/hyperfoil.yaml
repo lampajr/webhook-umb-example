@@ -36,6 +36,7 @@ scripts:
   run-hf-benchmark:
     - queue-download: ${{HF_REPORT_FILE}}
     - queue-download: ${{HF_BENCHMARK_REF}}
+    - script: select-jbang
     # wait for the SUT application to be ready
     - wait-for: APP_READY
     - log: running Hyperfoil benchmark..

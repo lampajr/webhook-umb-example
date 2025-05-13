@@ -57,7 +57,7 @@ states:
   APP_FOLDER: /tmp/quarkus_app
   APP_COMMIT: main
 
-  APP_JAVA_VERSION: temurin-21.0.5+11.0.LTS
+  APP_JAVA_VERSION: 21.0.7-tem
 
   # localhost/test/getting-started:0.0.1-SNAPSHOT
   APP_TAG_GROUP: test
