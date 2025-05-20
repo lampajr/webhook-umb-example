@@ -21,7 +21,8 @@ public class GreetingResource {
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    public String hello() {
+    public String hello() throws InterruptedException {
+        Thread.sleep(2000);
         return "hello";
     }
 }
