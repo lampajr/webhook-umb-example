@@ -19,6 +19,7 @@ public class GreetingResource {
         return service.greeting(name);
     }
 
+    
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public String hello() {
