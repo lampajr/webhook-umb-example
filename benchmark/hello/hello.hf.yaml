@@ -37,5 +37,6 @@ phases:
         initialUsersPerSec: 1
         targetUsersPerSec: !param USERS_PER_SEC 20
         duration: !param WARMUP_DURATION 20s
+        maxSessions: !param MAX_SESSIONS 200
         scenario:
           - getAllHeroes: *hello
