@@ -31,3 +31,4 @@ states:
 
   REPO_FULL_NAME: lampajr/webhook-umb-example
   PULL_REQUEST_NUMBER:
+  JOB_ID: getting-started
